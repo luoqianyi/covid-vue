@@ -3,7 +3,7 @@
     <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
       <el-input v-model="Emp.name"  autocomplete="off" ></el-input>
     </el-form-item>
-    
+
     <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
   <el-radio v-model="Emp.sex" label="男">男</el-radio>
   <el-radio v-model="Emp.sex" label="女">女</el-radio>
@@ -50,7 +50,7 @@
 <script>
   export default {
      created() {
-    axios.get("http://localhost:8080/depart/findAll").then((resp) => {
+    axios.get("/depart/findAll").then((resp) => {
       console.log(resp.data);
       this.options3 = resp.data;
     });
@@ -80,7 +80,7 @@
           label: '与新冠肺炎有关的其他症状，如流涕，咽痛，肌痛，腹泻等'
         }],
         value: '',
-      
+
         formLabelWidth: '120px',
         options: [{
           value: '选项1',
@@ -124,7 +124,7 @@
           depart: [
             { required: true, message: '请选择部门', trigger: 'blur' }
           ]
-      
+
         }
       };
     },
@@ -133,7 +133,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            axios.post('http://localhost:8080/emp/save',this.Emp).then((resp)=>{
+            axios.post('/emp/save',this.Emp).then((resp)=>{
               if(resp.data=='success'){
                this.$alert('打卡成功！',"消息",{
                  confirmButtonText:"确定",

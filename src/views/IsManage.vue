@@ -220,13 +220,13 @@
     methods: {
       search(){
       if(!this.stext){
-      axios.get('http://localhost:8080/empis/findAll/1/6').then((resp)=>{
+      axios.get('/empis/findAll/1/6').then((resp)=>{
         this.tableData=resp.data.records
         this.total=resp.data.total
         this.cname=""
       })
       }else{
-      axios.get('http://localhost:8080/empis/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
+      axios.get('/empis/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
               this.tableData=resp.data
               this.total=resp.data.total
             })}
@@ -236,7 +236,7 @@
     },
         submitForm() {
           console.log(this.EmpIs.end)
-            axios.post('http://localhost:8080/empis/save',this.EmpIs).then((resp)=>{
+            axios.post('/empis/save',this.EmpIs).then((resp)=>{
               if(resp.data=='success'){
                this.$alert('隔离记录添加成功！',"消息",{
                  confirmButtonText:"确定",
@@ -253,7 +253,7 @@
           confirmButtonText:'确定',
           cancelButtonText:'取消',
           type:'warning'
-        }).then(()=>{axios.delete('http://localhost:8080/empis/deleteById/'+row.id).then((resp)=>{
+        }).then(()=>{axios.delete('/empis/deleteById/'+row.id).then((resp)=>{
           this.$alert(row.name+'的隔离记录删除成功！',"消息",{
                  confirmButtonText:"确定",
                  callback:action=>{
@@ -263,7 +263,7 @@
         })})
       },
       update(){
-            axios.put('http://localhost:8080/empis/update',this.EmpIs).then((resp)=>{
+            axios.put('/empis/update',this.EmpIs).then((resp)=>{
               console.log(resp)
               if(resp.data=='success'){
                this.$alert(this.EmpIs.name+'的隔离记录修改成功！',"消息",{
@@ -276,12 +276,12 @@
             })
         },
       edit(row) {
-         axios.get('http://localhost:8080/empis/findById/'+row.id).then((resp)=>{
+         axios.get('/empis/findById/'+row.id).then((resp)=>{
         this.EmpIs=resp.data;
       })
       },
       handleCurrentChange(currentPage){
-        axios.get('http://localhost:8080/empis/findAll/'+currentPage+'/6').then((resp)=>{
+        axios.get('/empis/findAll/'+currentPage+'/6').then((resp)=>{
         this.tableData=resp.data.records
         this.total=resp.data.total
       })
@@ -302,7 +302,7 @@
       }
     },
     created(){
-      axios.get('http://localhost:8080/empis/findAll/1/6').then((resp)=>{
+      axios.get('/empis/findAll/1/6').then((resp)=>{
         this.tableData=resp.data.records
         for(var i=0;i<this.tableData.length;i++){
           if(this.tableData[i].begin!=null) {
@@ -311,7 +311,7 @@
         }
         this.total=resp.data.total
       });
-    axios.get("http://localhost:8080/depart/findAll").then((resp) => {
+    axios.get("/depart/findAll").then((resp) => {
       console.log(resp.data);
       this.options3 = resp.data;
     });
@@ -389,11 +389,11 @@
   .el-select .el-input {
     width: 130px;
   }.input-with-select{
-    
+
     float: right;
   }
   .input-with-select .el-input-group__prepend {
-    
+
     background-color: #fff;
   }
 </style>

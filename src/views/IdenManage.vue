@@ -195,7 +195,7 @@ export default {
   methods: {
     search() {
       if (!this.stext) {
-        axios.get("http://localhost:8080/empiden/findAll/1/6").then((resp) => {
+        axios.get("/empiden/findAll/1/6").then((resp) => {
           this.tableData = resp.data.records;
           this.total = resp.data.total;
           this.cname = "";
@@ -203,7 +203,7 @@ export default {
       } else {
         axios
           .get(
-            "http://localhost:8080/empiden/search/" +
+            "/empiden/search/" +
               this.searchKey +
               "/" +
               this.stext
@@ -219,7 +219,7 @@ export default {
     },
     submitForm() {
       axios
-        .post("http://localhost:8080/empiden/save", this.addEmpIden)
+        .post("/empiden/save", this.addEmpIden)
         .then((resp) => {
           if (resp.data == "success") {
             this.$alert("确诊/疑似病例添加成功！", "消息", {
@@ -238,7 +238,7 @@ export default {
         type: "warning",
       }).then(() => {
         axios
-          .delete("http://localhost:8080/empiden/deleteById/" + row.id)
+          .delete("/empiden/deleteById/" + row.id)
           .then((resp) => {
             this.$alert(row.name + "的病例记录删除成功！", "消息", {
               confirmButtonText: "确定",
@@ -252,7 +252,7 @@ export default {
 
     update() {
       axios
-        .put("http://localhost:8080/empiden/update", this.EmpIden)
+        .put("/empiden/update", this.EmpIden)
         .then((resp) => {
           console.log(resp);
           if (resp.data == "success") {
@@ -267,14 +267,14 @@ export default {
     },
     edit(row) {
       axios
-        .get("http://localhost:8080/empiden/findById/" + row.id)
+        .get("/empiden/findById/" + row.id)
         .then((resp) => {
           this.EmpIden = resp.data;
         });
     },
     handleCurrentChange(currentPage) {
       axios
-        .get("http://localhost:8080/empiden/findAll/" + currentPage + "/6")
+        .get("/empiden/findAll/" + currentPage + "/6")
         .then((resp) => {
           this.tableData = resp.data.records;
           this.total = resp.data.total;
@@ -295,11 +295,11 @@ export default {
     },
   },
   created() {
-    axios.get("http://localhost:8080/empiden/findAll/1/6").then((resp) => {
+    axios.get("/empiden/findAll/1/6").then((resp) => {
       this.tableData = resp.data.records;
       this.total = resp.data.total;
     });
-    axios.get("http://localhost:8080/depart/findAll").then((resp) => {
+    axios.get("/depart/findAll").then((resp) => {
       console.log(resp.data);
       this.options2 = resp.data;
     });

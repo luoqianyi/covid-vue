@@ -58,7 +58,7 @@
           cnum: [
             { required: true, message: '请输入负责人电话', trigger: 'blur' }
           ]
-      
+
         }
       };
     },
@@ -66,7 +66,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            axios.post('http://localhost:8080/Material/save',this.Mat).then((resp)=>{
+            axios.post('/Material/save',this.Mat).then((resp)=>{
               if(resp.data=='success'){
                this.$alert('物资添加成功！',"消息",{
                  confirmButtonText:"确定",

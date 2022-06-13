@@ -46,7 +46,7 @@
           </div>
         </template>
     </el-table-column>
-    
+
     <el-table-column
       prop="risk"
       label="是否到达过高风险地区"
@@ -156,15 +156,15 @@
     methods: {
     search(){
       if(!this.stext){
-        
-      axios.get('http://localhost:8080/emp/findAll/1/6').then((resp)=>{
+
+      axios.get('/emp/findAll/1/6').then((resp)=>{
         console.log(resp)
         this.tableData=resp.data.records
         this.total=resp.data.total
         this.cname=""
       })
       }else{
-      axios.get('http://localhost:8080/emp/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
+      axios.get('/emp/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
               this.tableData=resp.data
               this.total=resp.data.total
             })}
@@ -178,7 +178,7 @@
           confirmButtonText:'确定',
           cancelButtonText:'取消',
           type:'warning'
-        }).then(()=>{axios.delete('http://localhost:8080/emp/deleteById/'+row.id).then((resp)=>{
+        }).then(()=>{axios.delete('/emp/deleteById/'+row.id).then((resp)=>{
           this.$alert(row.name+'的打卡记录删除成功！',"消息",{
                  confirmButtonText:"确定",
                  callback:action=>{
@@ -189,7 +189,7 @@
       },
 
       update(){
-            axios.put('http://localhost:8080/emp/update',this.Emp).then((resp)=>{
+            axios.put('/emp/update',this.Emp).then((resp)=>{
               console.log(resp)
               if(resp.data=='success'){
                this.$alert(this.Emp.name+'的打卡记录修改成功！',"消息",{
@@ -202,12 +202,12 @@
             })
         },
       edit(row) {
-         axios.get('http://localhost:8080/emp/findById/'+row.id).then((resp)=>{
+         axios.get('/emp/findById/'+row.id).then((resp)=>{
         this.Emp=resp.data;
       })
       },
       handleCurrentChange(currentPage){
-        axios.get('http://localhost:8080/emp/findAll/'+currentPage+'/6').then((resp)=>{
+        axios.get('/emp/findAll/'+currentPage+'/6').then((resp)=>{
         this.tableData=resp.data.records
         this.total=resp.data.total
       })
@@ -228,12 +228,12 @@
       }
     },
     created(){
-      axios.get('http://localhost:8080/emp/findAll/1/6').then((resp)=>{
+      axios.get('/emp/findAll/1/6').then((resp)=>{
         console.log(resp)
         this.tableData=resp.data.records
         this.total=resp.data.total
       });
-          axios.get("http://localhost:8080/depart/findAll").then((resp) => {
+          axios.get("/depart/findAll").then((resp) => {
       console.log(resp.data);
       this.options3 = resp.data;
     });

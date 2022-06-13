@@ -7,7 +7,8 @@ import './plugins/element.js'
 import * as echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
-
+import axios from "axios";
+axios.defaults.baseURL='http://1.116.189.219:8000'
 new Vue({
   router,
   store,

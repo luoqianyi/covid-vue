@@ -30,7 +30,7 @@ export default {
             var machartDom=document.getElementById('material');
             var myChart = echarts.init(chartDom);
             var materialChart=echarts.init(machartDom);
-        axios.get('http://localhost:8080/empiden/LineVO').then((resp)=>{
+        axios.get('/empiden/LineVO').then((resp)=>{
             this.LineVO.month=resp.data.month
             this.LineVO.status=resp.data.status
             console.log(this.LineVO.status)
@@ -96,7 +96,7 @@ export default {
 };
 myChart.setOption(option);
         });
-        axios.get('http://localhost:8080/empiden/PieVO').then((resp)=>{
+        axios.get('/empiden/PieVO').then((resp)=>{
     this.PieVo=resp.data
     var option2= {
     tooltip: {
@@ -142,7 +142,7 @@ materialChart.setOption(option2);
 })
     },
     methods:{
-         
+
     }
 }
 </script>

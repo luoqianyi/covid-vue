@@ -93,11 +93,11 @@
 </el-dialog>
   </div>
 </template>
- 
+
 <script>
 export default {
   created(){
-        axios.get("http://localhost:8080/depart/findAll").then((resp) => {
+        axios.get("/depart/findAll").then((resp) => {
       this.options2 = resp.data;
     });
   },
@@ -134,7 +134,7 @@ export default {
                             this.$alert("注册用户名或密码不能为空")
                             this.loading=false;
            }else if(this.user.password==this.user.repassword){
-        axios.post('http://localhost:8080/userlogin/register',this.user).then((resp)=>{
+        axios.post('/userlogin/register',this.user).then((resp)=>{
           console.log(resp)
           this.loading=true;
                 if(resp.data=='success'){
@@ -161,7 +161,7 @@ export default {
       }
     },
     handleLogin() {
-        axios.post('http://localhost:8080/userlogin/user',this.loginForm).then((resp)=>{
+        axios.post('/userlogin/user',this.loginForm).then((resp)=>{
           console.log(resp)
           this.loading=true;
            if(this.loginForm.username==""||this.loginForm.password=="") {
@@ -182,13 +182,13 @@ export default {
                   this.$alert("用户名或密码错误")
                 }
                     }
-          
+
         })
       }
     }
   };
 </script>
- 
+
 <style scoped>
 .login-form-layout {
   position: absolute;
@@ -198,11 +198,11 @@ export default {
   margin: 140px auto;
   border-top: 10px solid #409eff;
 }
- 
+
 .login-title {
   text-align: center;
 }
- 
+
 .login-center-layout {
   background: #409eff;
   width: auto;

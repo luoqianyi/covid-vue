@@ -113,14 +113,14 @@
       },
       search(){
       if(!this.stext){
-        
-      axios.get('http://localhost:8080/Material/findAll/1/6').then((resp)=>{
+
+      axios.get('/Material/findAll/1/6').then((resp)=>{
         this.tableData=resp.data.records
         this.total=resp.data.total
         this.cname=""
       })
       }else{
-      axios.get('http://localhost:8080/Material/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
+      axios.get('/Material/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
               this.tableData=resp.data
               this.total=resp.data.total
             })}
@@ -133,7 +133,7 @@
           confirmButtonText:'确定',
           cancelButtonText:'取消',
           type:'warning'
-        }).then(()=>{axios.delete('http://localhost:8080/Material/deleteById/'+row.id).then((resp)=>{
+        }).then(()=>{axios.delete('/Material/deleteById/'+row.id).then((resp)=>{
           this.$alert(row.name+'的物资记录删除成功！',"消息",{
                  confirmButtonText:"确定",
                  callback:action=>{
@@ -144,7 +144,7 @@
       },
 
       update(){
-            axios.put('http://localhost:8080/Material/update',this.Mat).then((resp)=>{
+            axios.put('/Material/update',this.Mat).then((resp)=>{
               console.log(resp)
               if(resp.data=='success'){
                this.$alert(this.Mat.name+'的物资记录修改成功！',"消息",{
@@ -157,12 +157,12 @@
             })
         },
       edit(row) {
-         axios.get('http://localhost:8080/Material/findById/'+row.id).then((resp)=>{
+         axios.get('/Material/findById/'+row.id).then((resp)=>{
         this.Mat=resp.data;
       })
       },
       handleCurrentChange(currentPage){
-        axios.get('http://localhost:8080/Material/findAll/'+currentPage+'/6').then((resp)=>{
+        axios.get('/Material/findAll/'+currentPage+'/6').then((resp)=>{
         this.tableData=resp.data.records
         this.total=resp.data.total
       })
@@ -183,7 +183,7 @@
       }
     },
     created(){
-      axios.get('http://localhost:8080/Material/findAll/1/6').then((resp)=>{
+      axios.get('/Material/findAll/1/6').then((resp)=>{
         console.log(resp)
         this.tableData=resp.data.records
         this.total=resp.data.total
@@ -222,12 +222,12 @@
   .el-select .el-input {
     width: 130px;
   }.input-with-select{
-    
+
     float: right;
   }
-  
+
   .input-with-select .el-input-group__prepend {
-    
+
     background-color: #fff;
   }
 </style>
