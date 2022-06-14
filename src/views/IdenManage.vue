@@ -425,6 +425,7 @@ export default {
         idate: "",
         place: "",
         depart: "",
+        status: "",
         phonenum: "",
       },
     };
