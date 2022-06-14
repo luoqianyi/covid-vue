@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="div">
     <el-card class="login-form-layout">
       <el-form
         autocomplete="on"
@@ -10,8 +10,8 @@
         <div style="text-align: center">
           <svg-icon icon-class="login-mall" style="width: 56px;height: 56px;color: #409EFF"></svg-icon>
         </div>
-        <h2 class="login-title color-main">疫情防控管理系统登录</h2>
-        <el-form-item prop="username">
+        <h2 class="login-title color-main">疫情防控管理系统登录入口</h2>
+        <el-form-item prop="username" style="padding-top: 20px">
           <el-input
             name="username"
             type="text"
@@ -42,7 +42,7 @@
             </span>
           </el-input>
         </el-form-item>
-        <el-form-item style="margin-bottom: 60px">
+        <el-form-item style="margin-bottom: 0px">
           <el-button
             style="width: 48%"
             type="primary"
@@ -168,8 +168,8 @@ export default {
   left: 0;
   right: 0;
   width: 360px;
-  margin: 140px auto;
-  border-top: 10px solid #409eff;
+  margin: 180px auto;
+  border: 2px solid #409eff;
 }
 
 .login-title {
@@ -183,5 +183,15 @@ export default {
   max-width: 100%;
   max-height: 100%;
   margin-top: 200px;
+}
+#div {
+  height: 773px;
+  background-image: linear-gradient(
+    150deg,
+    rgb(48, 79, 254) 15%,
+    rgb(0, 176, 255) 70%,
+    rgb(100, 181, 246) 94%
+  );
+  z-index: -1;
 }
 </style>

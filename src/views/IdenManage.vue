@@ -6,6 +6,7 @@
     <el-input
         placeholder="请输入内容"
         v-model="stext"
+        @keyup.enter.native="search()"
         class="input-with-select"
         style="width: 40%"
     >

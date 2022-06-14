@@ -1,7 +1,7 @@
 <template>
   <div class="index">
       <el-container style="height: 100%; border: 1px solid #eee">
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+  <el-aside width="200px" style="background-color: #fff">
 
     <el-menu router :default-active='$route.path'>
       <el-submenu  v-for="(item,index) in router" :index="index+''" :key="index" >
@@ -34,3 +34,8 @@ export default {
   name: 'index',
 }
 </script>
+<style>
+.el-aside {
+  margin-top: 20px;
+}
+</style>
