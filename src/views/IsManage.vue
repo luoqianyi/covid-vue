@@ -15,6 +15,7 @@
   <el-table
     :data="tableData"
     border
+    v-loading="loading"
     style="width: 100%">
       <el-table-column
       prop="name"
@@ -218,90 +219,112 @@
 <script>
   export default {
     methods: {
-      search(){
-      if(!this.stext){
-      axios.get('/empis/findAll/1/6').then((resp)=>{
-        this.tableData=resp.data.records
-        this.total=resp.data.total
-        this.cname=""
-      })
-      }else{
-      axios.get('/empis/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
-              this.tableData=resp.data
-              this.total=resp.data.total
-            })}
-    },
-    getKey(e){
+      search() {
+        if (!this.stext) {
+          axios.get('/empis/findAll/1/6').then((resp) => {
+            this.tableData = resp.data.records
+            this.total = resp.data.total
+            this.cname = ""
+            this.searchKey = null
+          })
+        } else {
+          if (this.searchKey == null) {
+            this.$message.warning("请选择搜索条件，搜索条件不可为空！")
+          } else
+            this.loading = true
+          axios.get('/empis/search/' + this.searchKey + "/" + this.stext).then((resp) => {
+            this.tableData = resp.data
+            this.total = resp.data.total
+            this.loading = false
+          })
+        }
+      },
+    getKey(e) {
       this.searchKey = e
     },
-        submitForm() {
-          console.log(this.EmpIs.end)
-            axios.post('/empis/save',this.EmpIs).then((resp)=>{
-              if(resp.data=='success'){
-               this.$alert('隔离记录添加成功！',"消息",{
-                 confirmButtonText:"确定",
-                 callback:action=>{
-                   window.location.reload()
-                 }
-               })
-              }
-            })
-      },
-
-   deleteRecord(row){
-        this.$confirm('是否确定要删除'+row.name+'的隔离记录?','删除数据',{
-          confirmButtonText:'确定',
-          cancelButtonText:'取消',
-          type:'warning'
-        }).then(()=>{axios.delete('/empis/deleteById/'+row.id).then((resp)=>{
-          this.$alert(row.name+'的隔离记录删除成功！',"消息",{
-                 confirmButtonText:"确定",
-                 callback:action=>{
-                   window.location.reload()
-                 }
-               })
-        })})
-      },
-      update(){
-            axios.put('/empis/update',this.EmpIs).then((resp)=>{
-              console.log(resp)
-              if(resp.data=='success'){
-               this.$alert(this.EmpIs.name+'的隔离记录修改成功！',"消息",{
-                 confirmButtonText:"确定",
-                 callback:action=>{
-                   window.location.reload()
-                 }
-               })
-              }
-            })
-        },
-      edit(row) {
-         axios.get('/empis/findById/'+row.id).then((resp)=>{
-        this.EmpIs=resp.data;
-      })
-      },
-      handleCurrentChange(currentPage){
-        axios.get('/empis/findAll/'+currentPage+'/6').then((resp)=>{
-        this.tableData=resp.data.records
-        this.total=resp.data.total
-      })
-      },
-      remoteMethod(query) {
-        if (query !== '') {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.options = this.list.filter(item => {
-              return item.label.toLowerCase()
-                .indexOf(query.toLowerCase()) > -1;
-            });
-          }, 200);
-        } else {
-          this.options = [];
+    submitForm() {
+      console.log(this.EmpIs.end)
+      axios.post('/empis/save', this.EmpIs).then((resp) => {
+        if (resp.data == 'success') {
+          this.$alert('隔离记录添加成功！', "消息", {
+            confirmButtonText: "确定",
+            type: 'success',
+            callback: action => {
+              window.location.reload()
+            }
+          })
         }
-      }
+      })
     },
+
+    deleteRecord(row) {
+      this.$confirm('是否确定要删除' + row.name + '的隔离记录?', '删除数据', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.delete('/empis/deleteById/' + row.id).then((resp) => {
+          this.$alert(row.name + '的隔离记录删除成功！', "消息", {
+            confirmButtonText: "确定",
+            callback: action => {
+              window.location.reload()
+            }
+          })
+        }).catch(err => {
+          this.$message.error("删除失败~")
+        })
+      })
+    },
+    update() {
+      axios.put('/empis/update', this.EmpIs).then((resp) => {
+        console.log(resp)
+        if (resp.data == 'success') {
+          this.$alert(this.EmpIs.name + '的隔离记录修改成功！', "消息", {
+            confirmButtonText: "确定",
+            callback: action => {
+              window.location.reload()
+            }
+          })
+        }
+      }).catch(err => {
+        this.$message.error("更新失败~")
+      })
+    },
+    edit(row) {
+      axios.get('/empis/findById/' + row.id).then((resp) => {
+        this.EmpIs = resp.data;
+      }).catch(err => {
+        this.$message.error("查询失败~")
+      })
+    },
+    handleCurrentChange(currentPage) {
+        this.loading = true
+      axios.get('/empis/findAll/' + currentPage + '/6').then((resp) => {
+        this.tableData = resp.data.records
+        this.total = resp.data.total
+        this.loading = false
+      }).catch(err => {
+        this.$message.error("查询失败~")
+      })
+    },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.options = this.list.filter(item => {
+            return item.label.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1;
+          });
+        }, 200);
+      } else {
+        this.options = [];
+      }
+
+    },
+  },
     created(){
+      this.loading = true
       axios.get('/empis/findAll/1/6').then((resp)=>{
         this.tableData=resp.data.records
         for(var i=0;i<this.tableData.length;i++){
@@ -310,11 +333,8 @@
         }
         }
         this.total=resp.data.total
+        this.loading = false
       });
-    axios.get("/depart/findAll").then((resp) => {
-      console.log(resp.data);
-      this.options3 = resp.data;
-    });
     },
 
     data() {

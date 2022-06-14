@@ -1,6 +1,6 @@
 <template>
 <div>
-    <el-input placeholder="请输入内容" v-model="stext" @keyup.enter.native="search()" class="input-with-select" style="width:40%">
+    <el-input placeholder="请输入内容" v-model="stext" class="input-with-select" style="width:40%">
     <el-select v-model="cname" slot="prepend" placeholder="请选择" @change="getKey">
       <el-option label="物资名称" value="name"></el-option>
       <el-option label="负责人" value="charge"></el-option>
@@ -11,6 +11,7 @@
 
   <el-table
     :data="tableData"
+    v-loading="loading"
     border
     style="width: 100%">
     <el-table-column
@@ -113,17 +114,24 @@
       },
       search(){
       if(!this.stext){
-
       axios.get('/Material/findAll/1/6').then((resp)=>{
         this.tableData=resp.data.records
         this.total=resp.data.total
         this.cname=""
-      })
-      }else{
-      axios.get('/Material/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
-              this.tableData=resp.data
-              this.total=resp.data.total
-            })}
+        this.searchKey = null
+      }).catch(err=>{this.$message.error("查询失败~")})
+      }else {
+        if (this.searchKey == null) {
+          this.$message.warning("请选择搜索条件，搜索条件不可为空！")
+        } else {
+          this.loading = true
+          axios.get('/Material/search/' + this.searchKey + "/" + this.stext).then((resp) => {
+            this.tableData = resp.data
+            this.total = resp.data.total
+            this.loading = false
+          })
+        }
+      }
     },
     getKey(e){
       this.searchKey = e
@@ -135,12 +143,13 @@
           type:'warning'
         }).then(()=>{axios.delete('/Material/deleteById/'+row.id).then((resp)=>{
           this.$alert(row.name+'的物资记录删除成功！',"消息",{
+                 type: 'success',
                  confirmButtonText:"确定",
                  callback:action=>{
                    window.location.reload()
                  }
                })
-        })})
+        }).catch(err=>{this.$message.error("删除失败~")})})
       },
 
       update(){
@@ -148,24 +157,27 @@
               console.log(resp)
               if(resp.data=='success'){
                this.$alert(this.Mat.name+'的物资记录修改成功！',"消息",{
+                 type: 'success',
                  confirmButtonText:"确定",
                  callback:action=>{
                    window.location.reload()
                  }
                })
               }
-            })
+            }).catch(err=>{this.$message.error("更新失败~")})
         },
       edit(row) {
          axios.get('/Material/findById/'+row.id).then((resp)=>{
         this.Mat=resp.data;
-      })
+      }).catch(err=>{this.$message.error("查询失败~")})
       },
       handleCurrentChange(currentPage){
+        this.loading = true
         axios.get('/Material/findAll/'+currentPage+'/6').then((resp)=>{
         this.tableData=resp.data.records
         this.total=resp.data.total
-      })
+          this.loading = false
+      }).catch(err=>{this.$message.error("查询失败~")})
       },
       remoteMethod(query) {
         if (query !== '') {
@@ -183,11 +195,13 @@
       }
     },
     created(){
+      this.loading = true
       axios.get('/Material/findAll/1/6').then((resp)=>{
         console.log(resp)
         this.tableData=resp.data.records
         this.total=resp.data.total
-      })
+        this.loading = false
+      }).catch(err=>{this.$message.error("查询失败~")})
     },
 
     data() {
@@ -203,7 +217,6 @@
         total:null,
         dialogTableVisible: false,
         dialogFormVisible: false,
-         formLabelWidth: '120px',
           Mat: {
             id:"",
             name:"",

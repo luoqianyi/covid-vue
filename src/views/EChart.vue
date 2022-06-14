@@ -107,7 +107,7 @@ myChart.setOption(option);
         left: 'center'
     },
      title: {
-        text: '物资情况'
+        text: '重要物资情况'
     },
     series: [
         {

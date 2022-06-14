@@ -50,10 +50,6 @@
 <script>
   export default {
      created() {
-    axios.get("/depart/findAll").then((resp) => {
-      console.log(resp.data);
-      this.options3 = resp.data;
-    });
   },
     data() {
       return {
@@ -137,12 +133,13 @@
               if(resp.data=='success'){
                this.$alert('打卡成功！',"消息",{
                  confirmButtonText:"确定",
+                 type: 'success',
                  callback:action=>{
                    this.$router.push('/RecordManage')
                  }
                })
               }
-            })
+            }).catch(err=>{this.$message.error("添加失败~")})
           } else {
             return false;
           }

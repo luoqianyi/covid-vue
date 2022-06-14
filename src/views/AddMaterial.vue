@@ -69,12 +69,15 @@
             axios.post('/Material/save',this.Mat).then((resp)=>{
               if(resp.data=='success'){
                this.$alert('物资添加成功！',"消息",{
+                 type: 'success',
                  confirmButtonText:"确定",
                  callback:action=>{
                    this.$router.push('/MaterialManage')
                  }
                })
               }
+            }).catch(err=>{
+              this.$message.error("添加失败~")
             })
           } else {
             return false;

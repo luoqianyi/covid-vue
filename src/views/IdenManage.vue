@@ -28,7 +28,7 @@
       ></el-button>
     </el-input>
 
-    <el-table :data="tableData" border style="width: 100%">
+    <el-table v-loading="loading" :data="tableData" border style="width: 100%">
       <el-table-column fixed prop="name" label="姓名" width="100">
       </el-table-column>
       <el-table-column prop="id" label="编号" width="50"> </el-table-column>
@@ -232,20 +232,27 @@ export default {
           this.tableData = resp.data.records;
           this.total = resp.data.total;
           this.cname = "";
+          this.searchKey = null
         });
       } else {
-        axios
-            .get(
-                "/empiden/search/" +
-                this.searchKey +
-                "/" +
-                this.stext
-            )
-            .then((resp) => {
-              this.tableData = resp.data;
-              this.total = resp.data.total;
-            });
-      }
+        if (this.searchKey==null){
+          this.$message.warning("请选择搜索条件，搜索条件不可为空！")
+        }else{
+          this.loading = true
+          axios
+              .get(
+                  "/empiden/search/" +
+                  this.searchKey +
+                  "/" +
+                  this.stext
+              )
+              .then((resp) => {
+                this.tableData = resp.data;
+                this.total = resp.data.total;
+                this.loading = false
+              });
+        }
+        }
     },
     getKey(e) {
       this.searchKey = e;
@@ -257,6 +264,7 @@ export default {
             if (resp.data == "success") {
               this.$alert("确诊/疑似病例添加成功！", "消息", {
                 confirmButtonText: "确定",
+                type: 'success',
                 callback: (action) => {
                   window.location.reload();
                 },
@@ -274,12 +282,13 @@ export default {
             .delete("/empiden/deleteById/" + row.id)
             .then((resp) => {
               this.$alert(row.name + "的病例记录删除成功！", "消息", {
+                type: 'success',
                 confirmButtonText: "确定",
                 callback: (action) => {
                   window.location.reload();
                 },
               });
-            });
+            }).catch(err=>{this.$message.error("删除失败~")});
       });
     },
 
@@ -290,28 +299,31 @@ export default {
             console.log(resp);
             if (resp.data == "success") {
               this.$alert(this.EmpIden.name + "的病例记录修改成功！", "消息", {
+                type: 'success',
                 confirmButtonText: "确定",
                 callback: (action) => {
                   window.location.reload();
                 },
               });
             }
-          });
+          }).catch(err=>{this.$message.error("更新失败~")});
     },
     edit(row) {
       axios
           .get("/empiden/findById/" + row.id)
           .then((resp) => {
             this.EmpIden = resp.data;
-          });
+          }).catch(err=>{this.$message.error("查询失败~")});
     },
     handleCurrentChange(currentPage) {
+      this.loading = true
       axios
           .get("/empiden/findAll/" + currentPage + "/6")
           .then((resp) => {
             this.tableData = resp.data.records;
             this.total = resp.data.total;
-          });
+            this.loading=false
+          }).catch(err=>{this.$message.error("查询失败~")});
     },
     remoteMethod(query) {
       if (query !== "") {
@@ -328,14 +340,12 @@ export default {
     },
   },
   created() {
+    this.loading = true
     axios.get("/empiden/findAll/1/6").then((resp) => {
       this.tableData = resp.data.records;
       this.total = resp.data.total;
-    });
-    axios.get("/depart/findAll").then((resp) => {
-      console.log(resp.data);
-      this.options2 = resp.data;
-    });
+      this.loading = false
+    }).catch(err=>{this.$message.error("查询失败~")});
   },
 
   data() {
@@ -399,7 +409,7 @@ export default {
       options: [],
       values: [],
       list: [],
-      loading: false,
+      loading: true,
       tableData: null,
       total: null,
       dialogTableVisible: false,

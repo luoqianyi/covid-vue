@@ -12,6 +12,7 @@
   <el-table
     :data="tableData"
     border
+    v-loading="loading"
     style="width: 100%">
     <el-table-column
       fixed
@@ -162,12 +163,20 @@
         this.tableData=resp.data.records
         this.total=resp.data.total
         this.cname=""
+        this.searchKey = null
       })
-      }else{
-      axios.get('/emp/search/'+this.searchKey+"/"+this.stext).then((resp)=>{
-              this.tableData=resp.data
-              this.total=resp.data.total
-            })}
+      }else {
+        if (this.searchKey == null) {
+          this.$message.warning("请选择搜索条件，搜索条件不可为空！")
+        } else {
+          this.loading = true
+          axios.get('/emp/search/' + this.searchKey + "/" + this.stext).then((resp) => {
+            this.tableData = resp.data
+            this.total = resp.data.total
+            this.loading = false
+          })
+        }
+      }
     },
     getKey(e){
       this.searchKey = e
@@ -180,12 +189,13 @@
           type:'warning'
         }).then(()=>{axios.delete('/emp/deleteById/'+row.id).then((resp)=>{
           this.$alert(row.name+'的打卡记录删除成功！',"消息",{
+                 type: 'success',
                  confirmButtonText:"确定",
                  callback:action=>{
                    window.location.reload()
                  }
                })
-        })})
+        }).catch(err=>{this.$message.error("删除失败~")})})
       },
 
       update(){
@@ -194,23 +204,26 @@
               if(resp.data=='success'){
                this.$alert(this.Emp.name+'的打卡记录修改成功！',"消息",{
                  confirmButtonText:"确定",
+                 type: 'success',
                  callback:action=>{
                    window.location.reload()
                  }
                })
               }
-            })
+            }).catch(err=>{this.$message.error("更新失败~")})
         },
       edit(row) {
          axios.get('/emp/findById/'+row.id).then((resp)=>{
         this.Emp=resp.data;
-      })
+      }).catch(err=>{this.$message.error("查询失败~")})
       },
       handleCurrentChange(currentPage){
+      this.loading = true
         axios.get('/emp/findAll/'+currentPage+'/6').then((resp)=>{
         this.tableData=resp.data.records
         this.total=resp.data.total
-      })
+          this.loading = false
+      }).catch(err=>{this.$message.error("查询失败~")})
       },
       remoteMethod(query) {
         if (query !== '') {
@@ -228,15 +241,13 @@
       }
     },
     created(){
+      this.loading = true
       axios.get('/emp/findAll/1/6').then((resp)=>{
         console.log(resp)
         this.tableData=resp.data.records
         this.total=resp.data.total
-      });
-          axios.get("/depart/findAll").then((resp) => {
-      console.log(resp.data);
-      this.options3 = resp.data;
-    });
+        this.loading = false
+      }).catch(err=>{this.$message.error("查询失败~")});
     },
 
     data() {
@@ -269,7 +280,7 @@
         stext:'',
         searchKey:"",
         options: [],
-        value: [],
+        values: [],
         list: [],
         loading: false,
         tableData: null,
