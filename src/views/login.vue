@@ -70,21 +70,6 @@
     <el-form-item label="确认密码" :label-width="formLabelWidth">
       <el-input show-password :type="pwdType" v-model="user.repassword" autocomplete="off"></el-input>
     </el-form-item>
- <el-form-item label="所属部门" :label-width="formLabelWidth">
-            <el-select
-              v-model="user.depart"
-              clearable
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="(item, index) in options2"
-                :key="index"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -117,7 +102,6 @@ export default {
         username: "",
         password: "",
         repassword:"",
-        depart:""
       },
       loginForm: {
         username: "",
