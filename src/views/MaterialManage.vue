@@ -1,6 +1,6 @@
 <template>
 <div>
-    <el-input placeholder="请输入内容" v-model="stext" class="input-with-select" style="width:40%">
+    <el-input placeholder="请输入内容" v-model="stext" @keyup.enter.native="search()" class="input-with-select" style="width:40%">
     <el-select v-model="cname" slot="prepend" placeholder="请选择" @change="getKey">
       <el-option label="物资名称" value="name"></el-option>
       <el-option label="负责人" value="charge"></el-option>
