@@ -81,20 +81,9 @@
 
 <script>
 export default {
-  created(){
-        axios.get("/depart/findAll").then((resp) => {
-      this.options2 = resp.data;
-    });
-  },
   name: "login",
   data() {
     return {
-      options2: [
-        {
-          value: "",
-          label: "",
-        },
-      ],
       formLabelWidth:'120px',
       LabelWidth:'40px',
       dialogFormVisible : false,

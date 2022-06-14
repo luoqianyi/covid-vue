@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-button type="primary" @click="addDialogFormVisible = true" size="medium"
-      >新增记录</el-button
+    >新增记录</el-button
     >
     <el-input
-      placeholder="请输入内容"
-      v-model="stext"
-      class="input-with-select"
-      style="width: 40%"
+        placeholder="请输入内容"
+        v-model="stext"
+        class="input-with-select"
+        style="width: 40%"
     >
       <el-select
-        v-model="cname"
-        slot="prepend"
-        placeholder="请选择"
-        @change="getKey"
+          v-model="cname"
+          slot="prepend"
+          placeholder="请选择"
+          @change="getKey"
       >
         <el-option label="姓名" value="name"></el-option>
         <el-option label="就诊医院" value="place"></el-option>
@@ -21,9 +21,9 @@
         <el-option label="就诊日期" value="idate"></el-option>
       </el-select>
       <el-button
-        slot="append"
-        icon="el-icon-search"
-        @click="search()"
+          slot="append"
+          icon="el-icon-search"
+          @click="search()"
       ></el-button>
     </el-input>
 
@@ -38,6 +38,8 @@
       </el-table-column>
       <el-table-column prop="place" label="就诊医院" width="200">
       </el-table-column>
+      <el-table-column prop="status" label="状态" width="50">
+      </el-table-column>
       <el-table-column prop="depart" label="所属部门" width="120">
       </el-table-column>
       <el-table-column prop="phonenum" label="手机号码" width="120">
@@ -47,13 +49,13 @@
       <el-table-column width="120" label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button
-            @click="(dialogFormVisible = true), edit(scope.row)"
-            type="text"
-            size="small"
-            >修改</el-button
+              @click="(dialogFormVisible = true), edit(scope.row)"
+              type="text"
+              size="small"
+          >修改</el-button
           >
           <el-button type="text" size="small" @click="deleteRecord(scope.row)"
-            >删除</el-button
+          >删除</el-button
           >
         </template>
       </el-table-column>
@@ -61,17 +63,17 @@
 
     <div class="block">
       <el-pagination
-        @current-change="handleCurrentChange"
-        :page-size="6"
-        layout="total, prev, pager, next"
-        :total="total"
+          @current-change="handleCurrentChange"
+          :page-size="6"
+          layout="total, prev, pager, next"
+          :total="total"
       >
       </el-pagination>
 
       <el-dialog
-        title="修改确诊/疑似病例记录"
-        :visible.sync="dialogFormVisible"
-        slot
+          title="修改确诊/疑似病例记录"
+          :visible.sync="dialogFormVisible"
+          slot
       >
         <el-form :model="EmpIden" ref="EmpIden">
           <el-form-item label="姓名" :label-width="formLabelWidth">
@@ -86,32 +88,48 @@
           </el-form-item>
           <el-form-item label="就诊日期" :label-width="formLabelWidth">
             <el-date-picker
-              v-model="EmpIden.idate"
-              align="right"
-              type="date"
-              placeholder="选择日期"
-              :picker-options="pickerOptions"
+                v-model="EmpIden.idate"
+                align="right"
+                type="date"
+                placeholder="选择日期"
+                :picker-options="pickerOptions"
             >
             </el-date-picker>
           </el-form-item>
           <el-form-item label="就诊医院" :label-width="formLabelWidth">
             <el-input v-model="EmpIden.place" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="所属部门" :label-width="formLabelWidth">
+          <el-form-item label="状态" :label-width="formLabelWidth">
             <el-select
-              v-model="EmpIden.depart"
-              clearable
-              placeholder="请选择"
-            >
+                v-model="EmpIden.status"
+                clearable
+                placeholder="请选择">
               <el-option
-                v-for="(item, index) in options2"
-                :key="index"
-                :label="item"
-                :value="item"
+                  v-for="(item, index) in options3"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
               >
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="所属部门" :label-width="formLabelWidth">
+            <el-select
+                v-model="EmpIden.depart"
+                clearable
+                placeholder="请选择"
+            >
+              <el-option
+                  v-for="(item, index) in options2"
+                  :key="index"
+                  :label="item"
+                  :value="item"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+
           <el-form-item label="手机号码" :label-width="formLabelWidth">
             <el-input v-model="EmpIden.phonenum" autocomplete="off"></el-input>
           </el-form-item>
@@ -119,17 +137,17 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
-            type="primary"
-            @click="(dialogFormVisible = false), update()"
-            >确 定</el-button
+              type="primary"
+              @click="(dialogFormVisible = false), update()"
+          >确 定</el-button
           >
         </div>
       </el-dialog>
 
       <el-dialog
-        title="新增确诊/疑似病例记录"
-        :visible.sync="addDialogFormVisible"
-        slot
+          title="新增确诊/疑似病例记录"
+          :visible.sync="addDialogFormVisible"
+          slot
       >
         <el-form :model="addEmpIden">
           <el-form-item label="姓名" :label-width="formLabelWidth">
@@ -144,11 +162,11 @@
           </el-form-item>
           <el-form-item label="就诊日期" :label-width="formLabelWidth">
             <el-date-picker
-              v-model="addEmpIden.idate"
-              align="right"
-              type="date"
-              placeholder="选择日期"
-              :picker-options="pickerOptions"
+                v-model="addEmpIden.idate"
+                align="right"
+                type="date"
+                placeholder="选择日期"
+                :picker-options="pickerOptions"
             >
             </el-date-picker>
           </el-form-item>
@@ -157,32 +175,46 @@
           </el-form-item>
           <el-form-item label="所属部门" :label-width="formLabelWidth">
             <el-select
-              v-model="addEmpIden.depart"
-              clearable
-              placeholder="请选择"
+                v-model="addEmpIden.depart"
+                clearable
+                placeholder="请选择"
             >
               <el-option
-                v-for="(item, index) in options2"
-                :key="index"
-                :label="item"
-                :value="item"
+                  v-for="(item, index) in options2"
+                  :key="index"
+                  :label="item"
+                  :value="item"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="状态" :label-width="formLabelWidth">
+            <el-select
+                v-model="EmpIden.status"
+                clearable
+                placeholder="请选择">
+              <el-option
+                  v-for="(item, index) in options3"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
               >
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="手机号码" :label-width="formLabelWidth">
             <el-input
-              v-model="addEmpIden.phonenum"
-              autocomplete="off"
+                v-model="addEmpIden.phonenum"
+                autocomplete="off"
             ></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addDialogFormVisible = false">取 消</el-button>
           <el-button
-            type="primary"
-            @click="(addDialogFormVisible = false), submitForm()"
-            >确 定</el-button
+              type="primary"
+              @click="(addDialogFormVisible = false), submitForm()"
+          >确 定</el-button
           >
         </div>
       </el-dialog>
@@ -202,16 +234,16 @@ export default {
         });
       } else {
         axios
-          .get(
-            "/empiden/search/" +
-              this.searchKey +
-              "/" +
-              this.stext
-          )
-          .then((resp) => {
-            this.tableData = resp.data;
-            this.total = resp.data.total;
-          });
+            .get(
+                "/empiden/search/" +
+                this.searchKey +
+                "/" +
+                this.stext
+            )
+            .then((resp) => {
+              this.tableData = resp.data;
+              this.total = resp.data.total;
+            });
       }
     },
     getKey(e) {
@@ -219,17 +251,17 @@ export default {
     },
     submitForm() {
       axios
-        .post("/empiden/save", this.addEmpIden)
-        .then((resp) => {
-          if (resp.data == "success") {
-            this.$alert("确诊/疑似病例添加成功！", "消息", {
-              confirmButtonText: "确定",
-              callback: (action) => {
-                window.location.reload();
-              },
-            });
-          }
-        });
+          .post("/empiden/save", this.addEmpIden)
+          .then((resp) => {
+            if (resp.data == "success") {
+              this.$alert("确诊/疑似病例添加成功！", "消息", {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                  window.location.reload();
+                },
+              });
+            }
+          });
     },
     deleteRecord(row) {
       this.$confirm("是否确定要删除" + row.name + "的病例记录?", "删除数据", {
@@ -238,47 +270,47 @@ export default {
         type: "warning",
       }).then(() => {
         axios
-          .delete("/empiden/deleteById/" + row.id)
-          .then((resp) => {
-            this.$alert(row.name + "的病例记录删除成功！", "消息", {
-              confirmButtonText: "确定",
-              callback: (action) => {
-                window.location.reload();
-              },
+            .delete("/empiden/deleteById/" + row.id)
+            .then((resp) => {
+              this.$alert(row.name + "的病例记录删除成功！", "消息", {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                  window.location.reload();
+                },
+              });
             });
-          });
       });
     },
 
     update() {
       axios
-        .put("/empiden/update", this.EmpIden)
-        .then((resp) => {
-          console.log(resp);
-          if (resp.data == "success") {
-            this.$alert(this.EmpIden.name + "的病例记录修改成功！", "消息", {
-              confirmButtonText: "确定",
-              callback: (action) => {
-                window.location.reload();
-              },
-            });
-          }
-        });
+          .put("/empiden/update", this.EmpIden)
+          .then((resp) => {
+            console.log(resp);
+            if (resp.data == "success") {
+              this.$alert(this.EmpIden.name + "的病例记录修改成功！", "消息", {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                  window.location.reload();
+                },
+              });
+            }
+          });
     },
     edit(row) {
       axios
-        .get("/empiden/findById/" + row.id)
-        .then((resp) => {
-          this.EmpIden = resp.data;
-        });
+          .get("/empiden/findById/" + row.id)
+          .then((resp) => {
+            this.EmpIden = resp.data;
+          });
     },
     handleCurrentChange(currentPage) {
       axios
-        .get("/empiden/findAll/" + currentPage + "/6")
-        .then((resp) => {
-          this.tableData = resp.data.records;
-          this.total = resp.data.total;
-        });
+          .get("/empiden/findAll/" + currentPage + "/6")
+          .then((resp) => {
+            this.tableData = resp.data.records;
+            this.total = resp.data.total;
+          });
     },
     remoteMethod(query) {
       if (query !== "") {
@@ -313,6 +345,24 @@ export default {
           label: "",
         },
       ],
+      options3: [
+        {
+          value: "疑似",
+          label: "疑似",
+        },
+        {
+          value: "确诊",
+          label: "确诊",
+        },
+        {
+          value: "治愈",
+          label: "治愈",
+        },
+        {
+          value: "死亡",
+          label: "死亡",
+        }
+      ],
       value: "",
       cname: "",
       stext: "",
@@ -346,7 +396,7 @@ export default {
         ],
       },
       options: [],
-      value: [],
+      values: [],
       list: [],
       loading: false,
       tableData: null,
@@ -364,6 +414,7 @@ export default {
         idate: "",
         place: "",
         depart: "",
+        status: "",
         phonenum: "",
       },
       addEmpIden: {
