@@ -136,7 +136,7 @@ export default {
   box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.03);
 }
 .v-modal {
-  background-color: white;
+  background-color: white !important;
   opacity: .9 !important;
   backdrop-filter: blur(80px);
 }
