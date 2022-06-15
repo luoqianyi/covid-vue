@@ -149,6 +149,7 @@ export default {
                   message: '登录成功',
                   type: 'success'
         });
+                localStorage.setItem("username",this.loginForm.username)
                   this.$router.push('/index')
                 }else {
                   this.loading=false;
