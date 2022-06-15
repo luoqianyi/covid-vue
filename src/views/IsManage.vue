@@ -1,6 +1,6 @@
 <template>
 <div>
-      <el-button  type="primary" @click="addDialogFormVisible = true"  size="medium">新增记录</el-button>
+      <el-button  type="primary" @click="upAndClear"  size="medium">新增记录</el-button>
     <el-input placeholder="请输入内容" v-model="stext" @keyup.enter.native="search()" class="input-with-select" style="width:40%">
     <el-select v-model="cname" slot="prepend" placeholder="请选择" @change="getKey">
       <el-option label="姓名" value="name"></el-option>
@@ -238,6 +238,12 @@
             this.loading = false
           })
         }
+      },
+      upAndClear(){
+        for (let empIsKey in this.EmpIs) {
+          this.EmpIs[empIsKey] = ''
+        }
+        this.addDialogFormVisible = true
       },
     getKey(e) {
       this.searchKey = e
