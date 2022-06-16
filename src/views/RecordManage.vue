@@ -66,7 +66,7 @@
     </el-table-column>
        <el-table-column
       prop="depart"
-      label="所属部门"
+      label="所在位置"
       width="120">
     </el-table-column>
     <el-table-column
@@ -121,20 +121,8 @@
      <el-form-item label="打卡时间" :label-width="formLabelWidth" >
       <el-input v-model="Emp.createTime" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="所属部门" :label-width="formLabelWidth">
-            <el-select
-              v-model="Emp.depart"
-              clearable
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="(item, index) in options3"
-                :key="index"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
-            </el-select>
+    <el-form-item label="所在位置" :label-width="formLabelWidth">
+      <el-input v-model="Emp.depart" autocomplete="off"></el-input>     
           </el-form-item>
      <el-form-item label="备注" :label-width="formLabelWidth">
       <el-input v-model="Emp.content" autocomplete="off"></el-input>

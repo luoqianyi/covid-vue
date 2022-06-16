@@ -28,15 +28,8 @@
     </el-option>
   </el-select>
     </el-form-item>
-     <el-form-item label="所属部门" :label-width="formLabelWidth" prop="depart">
-            <el-select
-              v-model="Emp.depart"
-              clearable
-              placeholder="请选择"
-            >
-              <el-option  v-for="(item, index) in options3" :key="index" :label="item" :value="item">
-              </el-option>
-            </el-select>
+     <el-form-item label="所在位置" :label-width="formLabelWidth" prop="depart">
+            <el-input v-model="EmpIden.depart" autocomplete="off"></el-input>
           </el-form-item>
      <el-form-item label="备注" :label-width="formLabelWidth">
       <el-input v-model="Emp.content" autocomplete="off"></el-input>
@@ -118,7 +111,7 @@
             { required: true, message: '请输入健康状况', trigger: 'blur' }
           ],
           depart: [
-            { required: true, message: '请选择部门', trigger: 'blur' }
+            { required: true, message: '请输入你所在的地址', trigger: 'blur' }
           ]
 
         }
