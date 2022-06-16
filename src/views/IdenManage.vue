@@ -18,7 +18,7 @@
       >
         <el-option label="姓名" value="name"></el-option>
         <el-option label="就诊医院" value="place"></el-option>
-        <el-option label="所属部门" value="depart"></el-option>
+        <el-option label="现居地址" value="depart"></el-option>
         <el-option label="就诊日期" value="idate"></el-option>
       </el-select>
       <el-button
@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column prop="status" label="状态" width="50">
       </el-table-column>
-      <el-table-column prop="depart" label="所属部门" width="120">
+      <el-table-column prop="depart" label="现居地址" width="120">
       </el-table-column>
       <el-table-column prop="phonenum" label="手机号码" width="120">
       </el-table-column>
@@ -76,18 +76,18 @@
           :visible.sync="dialogFormVisible"
           slot
       >
-        <el-form :model="EmpIden" ref="EmpIden">
-          <el-form-item label="姓名" :label-width="formLabelWidth">
+        <el-form :model="EmpIden" ref="EmpIden" :rules="rules">
+          <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
             <el-input v-model="EmpIden.name" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="性别" :label-width="formLabelWidth">
+          <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
             <el-radio v-model="EmpIden.sex" label="男">男</el-radio>
             <el-radio v-model="EmpIden.sex" label="女">女</el-radio>
           </el-form-item>
-          <el-form-item label="身份证号" :label-width="formLabelWidth">
+          <el-form-item label="身份证号" :label-width="formLabelWidth" prop="idcard">
             <el-input v-model="EmpIden.idcard" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="就诊日期" :label-width="formLabelWidth">
+          <el-form-item label="就诊日期" :label-width="formLabelWidth" prop="idate">
             <el-date-picker
                 v-model="EmpIden.idate"
                 align="right"
@@ -97,10 +97,10 @@
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="就诊医院" :label-width="formLabelWidth">
+          <el-form-item label="就诊医院" :label-width="formLabelWidth" prop="place">
             <el-input v-model="EmpIden.place" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="状态" :label-width="formLabelWidth">
+          <el-form-item label="状态" :label-width="formLabelWidth" prop="status">
             <el-select
                 v-model="EmpIden.status"
                 clearable
@@ -114,24 +114,12 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属部门" :label-width="formLabelWidth">
-            <el-select
-                v-model="EmpIden.depart"
-                clearable
-                placeholder="请选择"
-            >
-              <el-option
-                  v-for="(item, index) in options2"
-                  :key="index"
-                  :label="item"
-                  :value="item"
-              >
-              </el-option>
-            </el-select>
+          <el-form-item label="现居地址" :label-width="formLabelWidth" prop="depart">
+            <el-input v-model="EmpIden.depart" autocomplete="off"></el-input>
           </el-form-item>
 
 
-          <el-form-item label="手机号码" :label-width="formLabelWidth">
+          <el-form-item label="手机号码" :label-width="formLabelWidth" prop="phonenum">
             <el-input v-model="EmpIden.phonenum" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -150,18 +138,18 @@
           :visible.sync="addDialogFormVisible"
           slot
       >
-        <el-form :model="addEmpIden">
-          <el-form-item label="姓名" :label-width="formLabelWidth">
+        <el-form :model="addEmpIden" :rules="rules">
+          <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
             <el-input v-model="addEmpIden.name" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="性别" :label-width="formLabelWidth">
+          <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
             <el-radio v-model="addEmpIden.sex" label="男">男</el-radio>
             <el-radio v-model="addEmpIden.sex" label="女">女</el-radio>
           </el-form-item>
-          <el-form-item label="身份证号" :label-width="formLabelWidth">
+          <el-form-item label="身份证号" :label-width="formLabelWidth" prop="idcard">
             <el-input v-model="addEmpIden.idcard" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="就诊日期" :label-width="formLabelWidth">
+          <el-form-item label="就诊日期" :label-width="formLabelWidth" prop="idate">
             <el-date-picker
                 v-model="addEmpIden.idate"
                 align="right"
@@ -171,25 +159,13 @@
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="就诊医院" :label-width="formLabelWidth">
+          <el-form-item label="就诊医院" :label-width="formLabelWidth" prop="place">
             <el-input v-model="addEmpIden.place" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="所属部门" :label-width="formLabelWidth">
-            <el-select
-                v-model="addEmpIden.depart"
-                clearable
-                placeholder="请选择"
-            >
-              <el-option
-                  v-for="(item, index) in options2"
-                  :key="index"
-                  :label="item"
-                  :value="item"
-              >
-              </el-option>
-            </el-select>
+          <el-form-item label="现居地址" :label-width="formLabelWidth" prop="depart">
+            <el-input v-model="addEmpIden.depart" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="状态" :label-width="formLabelWidth">
+          <el-form-item label="状态" :label-width="formLabelWidth" prop="status">
             <el-select
                 v-model="EmpIden.status"
                 clearable
@@ -203,7 +179,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="手机号码" :label-width="formLabelWidth">
+          <el-form-item label="手机号码" :label-width="formLabelWidth" prop="phonenum">
             <el-input
                 v-model="addEmpIden.phonenum"
                 autocomplete="off"
@@ -257,7 +233,7 @@ export default {
     getKey(e) {
       this.searchKey = e;
     },
-    submitForm() {
+    submitForm(formName) {
       axios
           .post("/empiden/save", this.addEmpIden)
           .then((resp) => {
@@ -269,9 +245,15 @@ export default {
                   window.location.reload();
                 },
               });
+            }else{
+              return false;
             }
           });
     },
+    resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
+
     deleteRecord(row) {
       this.$confirm("是否确定要删除" + row.name + "的病例记录?", "删除数据", {
         confirmButtonText: "确定",
@@ -439,9 +421,41 @@ export default {
         status: "",
         phonenum: "",
       },
+      rules: {
+          name: [
+            { required: true, message: '请输入姓名', trigger: 'blur' },
+            { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+          ],
+          idcard: [
+            { required: true, message: '请输入身份证号', trigger: 'blur' },
+            { min: 18, max: 18, message: '身份证号不合法', trigger: 'blur' }
+          ],
+          idate: [
+            { required: true, message: '请选择就诊日期', trigger: 'blur' }
+          ],
+          place: [
+            { required: true, message: '请输入就诊医院', trigger: 'blur' }
+          ],
+          depart: [
+            { required: true, message: '请输入现居地址', trigger: 'blur' }
+          ],
+          status:[
+            { required: true, message: '请输入目前的状态', trigger: 'blur' }
+          ],
+          phonenum: [
+            { required: true, message: '请输入手机号码', trigger: 'blur' },
+            { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'blur' }
+          ],
+          sex: [
+            { required: true, message: '请输入性别', trigger: 'blur' }
+          ]
+        }
     };
   },
-};
+}
+
+
+
 </script>
 <style>
 .el-select .el-input {
