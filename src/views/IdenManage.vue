@@ -18,7 +18,7 @@
       >
         <el-option label="姓名" value="name"></el-option>
         <el-option label="就诊医院" value="place"></el-option>
-        <el-option label="所在位置" value="depart"></el-option>
+        <el-option label="所属部门" value="depart"></el-option>
         <el-option label="就诊日期" value="idate"></el-option>
       </el-select>
       <el-button
@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column prop="status" label="状态" width="50">
       </el-table-column>
-      <el-table-column prop="depart" label="所在位置" width="120">
+      <el-table-column prop="depart" label="所属部门" width="120">
       </el-table-column>
       <el-table-column prop="phonenum" label="手机号码" width="120">
       </el-table-column>
@@ -114,8 +114,20 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="所在位置" :label-width="formLabelWidth" >
-           <el-input v-model="EmpIden.depart" autocomplete="off"></el-input>
+          <el-form-item label="所属部门" :label-width="formLabelWidth">
+            <el-select
+                v-model="EmpIden.depart"
+                clearable
+                placeholder="请选择"
+            >
+              <el-option
+                  v-for="(item, index) in options2"
+                  :key="index"
+                  :label="item"
+                  :value="item"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
 
 
@@ -162,8 +174,20 @@
           <el-form-item label="就诊医院" :label-width="formLabelWidth">
             <el-input v-model="addEmpIden.place" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="所在位置" :label-width="formLabelWidth">
-            <el-input v-model="EmpIden.depart" autocomplete="off"></el-input>
+          <el-form-item label="所属部门" :label-width="formLabelWidth">
+            <el-select
+                v-model="addEmpIden.depart"
+                clearable
+                placeholder="请选择"
+            >
+              <el-option
+                  v-for="(item, index) in options2"
+                  :key="index"
+                  :label="item"
+                  :value="item"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="状态" :label-width="formLabelWidth">
             <el-select
@@ -190,7 +214,7 @@
           <el-button @click="addDialogFormVisible = false">取 消</el-button>
           <el-button
               type="primary"
-              @click="(addDialogFormVisible = false), submitForm('addEmpIden')"
+              @click="(addDialogFormVisible = false), submitForm()"
           >确 定</el-button
           >
         </div>
@@ -200,8 +224,6 @@
 </template>
 
 <script>
-import { validate } from 'json-schema';
-
 export default {
   methods: {
     search() {
@@ -235,10 +257,8 @@ export default {
     getKey(e) {
       this.searchKey = e;
     },
-    submitForm(formName) {
-     this.$refs[formName].validate((valid)=>{
-      if(valid){
-        axios
+    submitForm() {
+      axios
           .post("/empiden/save", this.addEmpIden)
           .then((resp) => {
             if (resp.data == "success") {
@@ -251,10 +271,6 @@ export default {
               });
             }
           });
-      }else{
-        return false;
-      }
-     })
     },
     deleteRecord(row) {
       this.$confirm("是否确定要删除" + row.name + "的病例记录?", "删除数据", {
