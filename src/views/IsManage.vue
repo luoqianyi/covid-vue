@@ -74,7 +74,7 @@
     </el-table-column>
         <el-table-column
       prop="depart"
-      label="所属部门"
+      label="现居地址"
       width="120">
     </el-table-column>
     <el-table-column
@@ -99,49 +99,37 @@
     </el-pagination>
 
 <el-dialog title="修改隔离记录" :visible.sync="dialogFormVisible" slot>
-  <el-form :model="EmpIs" ref="EmpIs">
-    <el-form-item label="姓名" :label-width="formLabelWidth">
+  <el-form :model="EmpIs" ref="EmpIs" :rules="rules">
+    <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
       <el-input v-model="EmpIs.name"  autocomplete="off" ></el-input>
     </el-form-item>
-      <el-form-item label="性别" :label-width="formLabelWidth">
+      <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
   <el-radio v-model="EmpIs.sex" label="男">男</el-radio>
   <el-radio v-model="EmpIs.sex" label="女">女</el-radio>
     </el-form-item>
-    <el-form-item label="手机号码" :label-width="formLabelWidth">
+    <el-form-item label="手机号码" :label-width="formLabelWidth" prop="phone">
       <el-input v-model="EmpIs.phone" autocomplete="off"></el-input>
     </el-form-item>
-     <el-form-item label="体温" :label-width="formLabelWidth">
+     <el-form-item label="体温" :label-width="formLabelWidth" prop="temp">
       <el-input v-model="EmpIs.temp" autocomplete="off"></el-input>
     </el-form-item>
-     <el-form-item label="隔离方式" :label-width="formLabelWidth">
+     <el-form-item label="隔离方式" :label-width="formLabelWidth" prop="type">
       <el-input v-model="EmpIs.type" autocomplete="off"></el-input>
     </el-form-item>
-     <el-form-item label="隔离地点" :label-width="formLabelWidth">
+     <el-form-item label="隔离地点" :label-width="formLabelWidth" prop="place">
       <el-input v-model="EmpIs.place" autocomplete="off"></el-input>
     </el-form-item>
-     <el-form-item label="隔离开始日期" :label-width="formLabelWidth">
+     <el-form-item label="隔离开始日期" :label-width="formLabelWidth" prop="begin">
       <el-input v-model="EmpIs.begin" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="出发地" :label-width="formLabelWidth">
+    <el-form-item label="出发地" :label-width="formLabelWidth" prop="leaved">
       <el-input v-model="EmpIs.leaved" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="途径地" :label-width="formLabelWidth">
+    <el-form-item label="途径地" :label-width="formLabelWidth" prop="arrived">
       <el-input v-model="EmpIs.arrived" autocomplete="off"></el-input>
     </el-form-item>
-         <el-form-item label="所属部门" :label-width="formLabelWidth" prop="depart">
-            <el-select
-              v-model="EmpIs.depart"
-              clearable
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="(item, index) in options3"
-                :key="index"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
-            </el-select>
+         <el-form-item label="现居地址" :label-width="formLabelWidth" prop="depart">
+      <el-input v-model="EmpIs.depart" autocomplete="off"></el-input>      
           </el-form-item>
      <el-form-item label="备注" :label-width="formLabelWidth">
       <el-input v-model="EmpIs.content" autocomplete="off"></el-input>
@@ -156,51 +144,39 @@
 
 
 <el-dialog title="新增隔离记录" :visible.sync="addDialogFormVisible" slot>
-  <el-form :model="EmpIs" >
-    <el-form-item label="姓名" :label-width="formLabelWidth">
+  <el-form :model="EmpIs" :rules="rules">
+    <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
       <el-input v-model="EmpIs.name"  autocomplete="off" ></el-input>
     </el-form-item>
-        <el-form-item label="性别" :label-width="formLabelWidth">
+        <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
           <el-radio v-model="EmpIs.sex" label="男">男</el-radio>
           <el-radio v-model="EmpIs.sex" label="女">女</el-radio>
     </el-form-item>
-    <el-form-item label="手机号码" :label-width="formLabelWidth">
+    <el-form-item label="手机号码" :label-width="formLabelWidth" prop="phone">
       <el-input v-model="EmpIs.phone" autocomplete="off"></el-input>
     </el-form-item>
-     <el-form-item label="体温" :label-width="formLabelWidth">
+     <el-form-item label="体温" :label-width="formLabelWidth" prop="temp">
       <el-input v-model="EmpIs.temp" autocomplete="off"></el-input>
     </el-form-item>
-     <el-form-item label="隔离方式" :label-width="formLabelWidth">
+     <el-form-item label="隔离方式" :label-width="formLabelWidth" prop="type">
       <el-input v-model="EmpIs.type" autocomplete="off"></el-input>
     </el-form-item>
-     <el-form-item label="隔离地点" :label-width="formLabelWidth">
+     <el-form-item label="隔离地点" :label-width="formLabelWidth" prop="place">
       <el-input v-model="EmpIs.place" autocomplete="off"></el-input>
     </el-form-item>
-     <el-form-item label="隔离开始日期" :label-width="formLabelWidth">
+     <el-form-item label="隔离开始日期" :label-width="formLabelWidth" prop="begin">
        <el-date-picker v-model="EmpIs.begin" align="right" type="date"
       placeholder="选择日期" :picker-options="pickerOptions">
     </el-date-picker>
     </el-form-item>
-    <el-form-item label="出发地" :label-width="formLabelWidth">
+    <el-form-item label="出发地" :label-width="formLabelWidth" prop="leaved">
       <el-input v-model="EmpIs.leaved" autocomplete="off"></el-input>
     </el-form-item>
-    <el-form-item label="途径地" :label-width="formLabelWidth">
+    <el-form-item label="途径地" :label-width="formLabelWidth" prop="arrived">
       <el-input v-model="EmpIs.arrived" autocomplete="off"></el-input>
     </el-form-item>
-         <el-form-item label="所属部门" :label-width="formLabelWidth" prop="depart">
-            <el-select
-              v-model="EmpIs.depart"
-              clearable
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="(item, index) in options3"
-                :key="index"
-                :label="item"
-                :value="item"
-              >
-              </el-option>
-            </el-select>
+         <el-form-item label="现居地址" :label-width="formLabelWidth" prop="depart">
+      <el-input v-model="EmpIs.depart" autocomplete="off"></el-input>      
           </el-form-item>
      <el-form-item label="备注" :label-width="formLabelWidth">
       <el-input v-model="EmpIs.content" autocomplete="off"></el-input>
@@ -403,10 +379,47 @@
             end:"",
             content:"",
             depart:""
-                }
+                },
+
+          rules: {
+          name: [
+            { required: true, message: '请输入姓名', trigger: 'blur' },
+            { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+          ],
+          place: [
+            { required: true, message: '请输入隔离地点', trigger: 'blur' },
+            
+          ],
+          begin: [
+            { required: true, message: '请输入出发地', trigger: 'blur' }
+          ],
+          arrived: [
+            { required: true, message: '请输入途径地', trigger: 'blur' }
+          ],
+          depart: [
+            { required: true, message: '请输入现居地址', trigger: 'blur' }
+          ],
+          status:[
+            { required: true, message: '请输入目前的状态', trigger: 'blur' }
+          ],
+          phone: [
+            { required: true, message: '请输入手机号码', trigger: 'blur' },
+            { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'blur' }
+          ],
+          sex: [
+            { required: true, message: '请输入性别', trigger: 'blur' }
+          ],
+          temp: [
+            { required: true, message: '请输入体温', trigger: 'blur' }
+          ],
+          type: [
+            { required: true, message: '请输入隔离方式', trigger: 'blur' }
+          ],
+      }
       }
     }
   }
+    
 </script>
 <style>
   .red{
