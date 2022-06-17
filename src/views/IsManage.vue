@@ -129,7 +129,7 @@
       <el-input v-model="EmpIs.arrived" autocomplete="off"></el-input>
     </el-form-item>
          <el-form-item label="现居地址" :label-width="formLabelWidth" prop="depart">
-      <el-input v-model="EmpIs.depart" autocomplete="off"></el-input>      
+      <el-input v-model="EmpIs.depart" autocomplete="off"></el-input>
           </el-form-item>
      <el-form-item label="备注" :label-width="formLabelWidth">
       <el-input v-model="EmpIs.content" autocomplete="off"></el-input>
@@ -138,13 +138,13 @@
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false,update()">确 定</el-button>
+    <el-button type="primary" @click="update('EmpIs')">确 定</el-button>
   </div>
 </el-dialog>
 
 
 <el-dialog title="新增隔离记录" :visible.sync="addDialogFormVisible" slot>
-  <el-form :model="EmpIs" :rules="rules">
+  <el-form :model="EmpIs" :rules="rules" ref="addEmpIs">
     <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
       <el-input v-model="EmpIs.name"  autocomplete="off" ></el-input>
     </el-form-item>
@@ -176,7 +176,7 @@
       <el-input v-model="EmpIs.arrived" autocomplete="off"></el-input>
     </el-form-item>
          <el-form-item label="现居地址" :label-width="formLabelWidth" prop="depart">
-      <el-input v-model="EmpIs.depart" autocomplete="off"></el-input>      
+      <el-input v-model="EmpIs.depart" autocomplete="off"></el-input>
           </el-form-item>
      <el-form-item label="备注" :label-width="formLabelWidth">
       <el-input v-model="EmpIs.content" autocomplete="off"></el-input>
@@ -185,7 +185,7 @@
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="addDialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="addDialogFormVisible = false,submitForm()">确 定</el-button>
+    <el-button type="primary" @click="submitForm('addEmpIs')">确 定</el-button>
   </div>
 </el-dialog>
 </div>
@@ -199,6 +199,11 @@
         if (!this.stext) {
           axios.get('/empis/findAll/1/6').then((resp) => {
             this.tableData = resp.data.records
+            for(var i=0;i<this.tableData.length;i++){
+              if(this.tableData[i].begin!=null) {
+                this.tableData[i].date=this.tableData[i].begin+" 至 "+this.tableData[i].end
+              }
+            }
             this.total = resp.data.total
             this.cname = ""
             this.searchKey = null
@@ -210,6 +215,11 @@
             this.loading = true
           axios.get('/empis/search/' + this.searchKey + "/" + this.stext).then((resp) => {
             this.tableData = resp.data
+            for(var i=0;i<this.tableData.length;i++){
+              if(this.tableData[i].begin!=null) {
+                this.tableData[i].date=this.tableData[i].begin+" 至 "+this.tableData[i].end
+              }
+            }
             this.total = resp.data.total
             this.loading = false
           })
@@ -224,15 +234,23 @@
     getKey(e) {
       this.searchKey = e
     },
-    submitForm() {
+    submitForm(formName) {
       console.log(this.EmpIs.end)
-      axios.post('/empis/save', this.EmpIs).then((resp) => {
-        if (resp.data == 'success') {
-          this.$alert('隔离记录添加成功！', "消息", {
-            confirmButtonText: "确定",
-            type: 'success',
-            callback: action => {
-              window.location.reload()
+      this.$refs[formName].validate((valid)=>{
+        if (valid){
+          axios.post('/empis/save', this.EmpIs).then((resp) => {
+            if (resp.data == 'success') {
+              this.$alert('隔离记录添加成功！', "消息", {
+                confirmButtonText: "确定",
+                type: 'success',
+                callback: action => {
+                  window.location.reload()
+                }
+              })
+              this.dialogFormVisible = false
+            }
+            else {
+              this.$message.error("添加失败~")
             }
           })
         }
@@ -257,20 +275,24 @@
         })
       })
     },
-    update() {
-      axios.put('/empis/update', this.EmpIs).then((resp) => {
-        console.log(resp)
-        if (resp.data == 'success') {
-          this.$alert(this.EmpIs.name + '的隔离记录修改成功！', "消息", {
-            confirmButtonText: "确定",
-            callback: action => {
-              window.location.reload()
+    update(formName) {
+        this.$refs[formName].validate((valid)=>{
+          axios.put('/empis/update', this.EmpIs).then((resp) => {
+            console.log(resp)
+            if (resp.data == 'success') {
+              this.$alert(this.EmpIs.name + '的隔离记录修改成功！', "消息", {
+                confirmButtonText: "确定",
+                type:"success",
+                callback: action => {
+                  window.location.reload()
+                }
+              })
+              this.dialogFormVisible = false
             }
+          }).catch(err => {
+            this.$message.error("更新失败~")
           })
-        }
-      }).catch(err => {
-        this.$message.error("更新失败~")
-      })
+        })
     },
     edit(row) {
       axios.get('/empis/findById/' + row.id).then((resp) => {
@@ -283,6 +305,11 @@
         this.loading = true
       axios.get('/empis/findAll/' + currentPage + '/6').then((resp) => {
         this.tableData = resp.data.records
+        for(var i=0;i<this.tableData.length;i++){
+          if(this.tableData[i].begin!=null) {
+            this.tableData[i].date=this.tableData[i].begin+" 至 "+this.tableData[i].end
+          }
+        }
         this.total = resp.data.total
         this.loading = false
       }).catch(err => {
@@ -384,11 +411,10 @@
           rules: {
           name: [
             { required: true, message: '请输入姓名', trigger: 'blur' },
-            { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+            { min:2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur' },
           ],
           place: [
             { required: true, message: '请输入隔离地点', trigger: 'blur' },
-            
           ],
           begin: [
             { required: true, message: '请输入出发地', trigger: 'blur' }
@@ -404,13 +430,14 @@
           ],
           phone: [
             { required: true, message: '请输入手机号码', trigger: 'blur' },
-            { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'blur' }
+            { pattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/, message: '电话号码格式不对' },
           ],
           sex: [
             { required: true, message: '请输入性别', trigger: 'blur' }
           ],
           temp: [
-            { required: true, message: '请输入体温', trigger: 'blur' }
+            { required: true, message: '请输入体温', trigger: 'blur' },
+            { pattern: /^(\-|\+)?\d+(\.\d+)?$/, message: '格式错误' }
           ],
           type: [
             { required: true, message: '请输入隔离方式', trigger: 'blur' }
@@ -419,7 +446,7 @@
       }
     }
   }
-    
+
 </script>
 <style>
   .red{

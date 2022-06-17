@@ -134,9 +134,9 @@ export default {
       }
     },
     handleLogin() {
+      this.loading=true;
         axios.post('/userlogin/user',this.loginForm).then((resp)=>{
           console.log(resp)
-          this.loading=true;
            if(this.loginForm.username==""||this.loginForm.password=="") {
                             this.$alert("用户名或密码不能为空")
                             this.loading=false;
@@ -157,6 +157,8 @@ export default {
                 }
                     }
 
+        }).catch(err=>{
+          this.$message.error("登录失败~")
         })
       }
     }

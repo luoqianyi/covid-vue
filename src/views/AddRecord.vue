@@ -19,7 +19,7 @@
       <el-input v-model="Emp.risk" autocomplete="off"></el-input>
     </el-form-item>
      <el-form-item label="健康状况" :label-width="formLabelWidth" prop="health">
-      <el-select v-model="Emp.health" clearable placeholder="请选择">
+      <el-select v-model="Emp.health" placeholder="请选择">
     <el-option
       v-for="item in options2"
       :key="item.value"
@@ -29,7 +29,7 @@
   </el-select>
     </el-form-item>
      <el-form-item label="现居地址" :label-width="formLabelWidth" prop="depart">
-      <el-input v-model="Emp.depart" autocomplete="off"></el-input>      
+      <el-input v-model="Emp.depart" autocomplete="off"></el-input>
           </el-form-item>
      <el-form-item label="备注" :label-width="formLabelWidth">
       <el-input v-model="Emp.content" autocomplete="off"></el-input>
@@ -92,20 +92,23 @@
         rules: {
           name: [
             { required: true, message: '请输入姓名', trigger: 'blur' },
-            { min:2, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+            { min:2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur' },
           ],
           sex: [
             { required: true, message: '请输入性别', trigger: 'blur' }
           ],
           phonenum: [
             { required: true, message: '请输入手机号码', trigger: 'blur' },
-            { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'blur' }
+            { pattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/, message: '电话号码格式不对' },
           ],
           temp: [
-            { required: true, message: '请输入体温', trigger: 'blur' }
+            { required: true, message: '请输入体温', trigger: 'blur' },
+            { pattern: /^(\-|\+)?\d+(\.\d+)?$/, message: '格式错误' }
           ],
           risk: [
-            { required: true, message: '请选择是否曾到达高风险地区', trigger: 'blur' }
+            { required: true, message: '请选择是否曾到达高风险地区', trigger: 'blur' },
+            { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' },
+            { pattern: /^[A-Za-z0-9\u4e00-\u9fa5]+$/, message: '不允许输入空格等特殊符号' },
           ],
           health: [
             { required: true, message: '请输入健康状况', trigger: 'blur' }

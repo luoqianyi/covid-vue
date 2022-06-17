@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-button type="primary" @click="addDialogFormVisible = true" size="medium"
-    >新增记录</el-button
+    >新增记录
+    </el-button
     >
     <el-input
         placeholder="请输入内容"
@@ -31,8 +32,8 @@
     <el-table v-loading="loading" :data="tableData" border style="width: 100%">
       <el-table-column fixed prop="name" label="姓名" width="100">
       </el-table-column>
-      <el-table-column prop="id" label="编号" width="50"> </el-table-column>
-      <el-table-column prop="sex" label="性别" width="50"> </el-table-column>
+      <el-table-column prop="id" label="编号" width="50"></el-table-column>
+      <el-table-column prop="sex" label="性别" width="50"></el-table-column>
       <el-table-column prop="idcard" label="身份证号码" width="170">
       </el-table-column>
       <el-table-column prop="idate" label="就诊日期" width="160">
@@ -53,10 +54,12 @@
               @click="(dialogFormVisible = true), edit(scope.row)"
               type="text"
               size="small"
-          >修改</el-button
+          >修改
+          </el-button
           >
           <el-button type="text" size="small" @click="deleteRecord(scope.row)"
-          >删除</el-button
+          >删除
+          </el-button
           >
         </template>
       </el-table-column>
@@ -127,9 +130,9 @@
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button
               type="primary"
-              @click="(dialogFormVisible = false), update()"
-          >确 定</el-button
-          >
+              @click=" update('EmpIden')"
+          >确 定
+          </el-button>
         </div>
       </el-dialog>
 
@@ -138,7 +141,7 @@
           :visible.sync="addDialogFormVisible"
           slot
       >
-        <el-form :model="addEmpIden" :rules="rules">
+        <el-form :model="addEmpIden" :rules="rules" ref="addEmpIden">
           <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
             <el-input v-model="addEmpIden.name" autocomplete="off"></el-input>
           </el-form-item>
@@ -167,7 +170,7 @@
           </el-form-item>
           <el-form-item label="状态" :label-width="formLabelWidth" prop="status">
             <el-select
-                v-model="EmpIden.status"
+                v-model="addEmpIden.status"
                 clearable
                 placeholder="请选择">
               <el-option
@@ -190,9 +193,9 @@
           <el-button @click="addDialogFormVisible = false">取 消</el-button>
           <el-button
               type="primary"
-              @click="(addDialogFormVisible = false), submitForm()"
-          >确 定</el-button
-          >
+              @click=" submitForm('addEmpIden')"
+          >确 定
+          </el-button>
         </div>
       </el-dialog>
     </div>
@@ -211,9 +214,9 @@ export default {
           this.searchKey = null
         });
       } else {
-        if (this.searchKey==null){
+        if (this.searchKey == null) {
           this.$message.warning("请选择搜索条件，搜索条件不可为空！")
-        }else{
+        } else {
           this.loading = true
           axios
               .get(
@@ -228,31 +231,36 @@ export default {
                 this.loading = false
               });
         }
-        }
+      }
     },
     getKey(e) {
       this.searchKey = e;
     },
     submitForm(formName) {
-      axios
-          .post("/empiden/save", this.addEmpIden)
-          .then((resp) => {
-            if (resp.data == "success") {
-              this.$alert("确诊/疑似病例添加成功！", "消息", {
-                confirmButtonText: "确定",
-                type: 'success',
-                callback: (action) => {
-                  window.location.reload();
-                },
+      this.$refs[formName].validate((valid)=>{
+        if (valid){
+          axios
+              .post("/empiden/save", this.addEmpIden)
+              .then((resp) => {
+                if (resp.data == "success") {
+                  this.$alert("确诊/疑似病例添加成功！", "消息", {
+                    confirmButtonText: "确定",
+                    type: 'success',
+                    callback: (action) => {
+                      window.location.reload();
+                    },
+                  });
+                  this.dialogFormVisible = false
+                } else {
+                  this.$message.error("添加失败~")
+                }
               });
-            }else{
-              return false;
-            }
-          });
+        }
+      })
     },
     resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
+      this.$refs[formName].resetFields();
+    },
 
     deleteRecord(row) {
       this.$confirm("是否确定要删除" + row.name + "的病例记录?", "删除数据", {
@@ -270,32 +278,43 @@ export default {
                   window.location.reload();
                 },
               });
-            }).catch(err=>{this.$message.error("删除失败~")});
+            }).catch(err => {
+          this.$message.error("删除失败~")
+        });
       });
     },
 
-    update() {
-      axios
-          .put("/empiden/update", this.EmpIden)
-          .then((resp) => {
-            console.log(resp);
-            if (resp.data == "success") {
-              this.$alert(this.EmpIden.name + "的病例记录修改成功！", "消息", {
-                type: 'success',
-                confirmButtonText: "确定",
-                callback: (action) => {
-                  window.location.reload();
-                },
-              });
-            }
-          }).catch(err=>{this.$message.error("更新失败~")});
+    update(formName) {
+      this.$refs[formName].validate((valid)=>{
+        if (valid){
+          axios
+              .put("/empiden/update", this.EmpIden)
+              .then((resp) => {
+                console.log(resp);
+                if (resp.data == "success") {
+                  this.$alert(this.EmpIden.name + "的病例记录修改成功！", "消息", {
+                    type: 'success',
+                    confirmButtonText: "确定",
+                    callback: (action) => {
+                      window.location.reload();
+                    },
+                  });
+                  this.dialogFormVisible = false
+                }
+              }).catch(err => {
+            this.$message.error("更新失败~")
+          });
+        }
+      })
     },
     edit(row) {
       axios
           .get("/empiden/findById/" + row.id)
           .then((resp) => {
             this.EmpIden = resp.data;
-          }).catch(err=>{this.$message.error("查询失败~")});
+          }).catch(err => {
+        this.$message.error("查询失败~")
+      });
     },
     handleCurrentChange(currentPage) {
       this.loading = true
@@ -304,8 +323,10 @@ export default {
           .then((resp) => {
             this.tableData = resp.data.records;
             this.total = resp.data.total;
-            this.loading=false
-          }).catch(err=>{this.$message.error("查询失败~")});
+            this.loading = false
+          }).catch(err => {
+        this.$message.error("查询失败~")
+      });
     },
     remoteMethod(query) {
       if (query !== "") {
@@ -327,7 +348,9 @@ export default {
       this.tableData = resp.data.records;
       this.total = resp.data.total;
       this.loading = false
-    }).catch(err=>{this.$message.error("查询失败~")});
+    }).catch(err => {
+      this.$message.error("查询失败~")
+    });
   },
 
   data() {
@@ -422,38 +445,37 @@ export default {
         phonenum: "",
       },
       rules: {
-          name: [
-            { required: true, message: '请输入姓名', trigger: 'blur' },
-            { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
-          ],
-          idcard: [
-            { required: true, message: '请输入身份证号', trigger: 'blur' },
-            { min: 18, max: 18, message: '身份证号不合法', trigger: 'blur' }
-          ],
-          idate: [
-            { required: true, message: '请选择就诊日期', trigger: 'blur' }
-          ],
-          place: [
-            { required: true, message: '请输入就诊医院', trigger: 'blur' }
-          ],
-          depart: [
-            { required: true, message: '请输入现居地址', trigger: 'blur' }
-          ],
-          status:[
-            { required: true, message: '请输入目前的状态', trigger: 'blur' }
-          ],
-          phonenum: [
-            { required: true, message: '请输入手机号码', trigger: 'blur' },
-            { min: 8, max: 20, message: '长度在 8 到 20 个字符', trigger: 'blur' }
-          ],
-          sex: [
-            { required: true, message: '请输入性别', trigger: 'blur' }
-          ]
-        }
+        name: [
+          {required: true, message: '请输入姓名', trigger: 'blur'},
+          { min:2, max: 20, message: '长度在 2 到 10 个字符', trigger: 'blur' },
+        ],
+        idcard: [
+          {required: true, message: '请输入身份证号', trigger: 'blur'},
+          { pattern: /^\d{15}$|^\d{18}$/ ,message: '身份证号只能是15位或18位数字'}
+        ],
+        idate: [
+          {required: true, message: '请选择就诊日期', trigger: 'blur'}
+        ],
+        place: [
+          {required: true, message: '请输入就诊医院', trigger: 'blur'},
+        ],
+        depart: [
+          {required: true, message: '请输入现居地址', trigger: 'blur'},
+        ],
+        status: [
+          {required: true, message: '请选择目前的状态' ,trigger: 'blur'}
+        ],
+        phonenum: [
+          {required: true, message: '请输入手机号码', trigger: 'blur'},
+          { pattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/, message: '电话号码格式不对' },
+        ],
+        sex: [
+          {required: true, message: '请选择性别', trigger: 'blur'}
+        ]
+      }
     };
   },
 }
-
 
 
 </script>
@@ -461,6 +483,7 @@ export default {
 .el-select .el-input {
   width: 130px;
 }
+
 .input-with-select {
   float: right;
 }
