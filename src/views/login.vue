@@ -158,6 +158,7 @@ export default {
                     }
 
         }).catch(err=>{
+          this.loading = false
           this.$message.error("登录失败~")
         })
       }
